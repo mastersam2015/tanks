@@ -1,0 +1,517 @@
+
+
+<meta name="viewport" content="width=600">
+<script type="text/javascript" src="jquery.js"></script>
+<body style="
+background-image: url('tlo.png');
+background-repeat: no-repeat;
+  background-size: 100% 100%;
+">
+<div style="position:absolute;" id="tank" width="30" ><img src="gora2.png" width="20" id="czoug"></div>
+<div style="position:absolute;" id="tank2" width="30" ><img src="gora.png" width="20" id="czoug2"></div>
+<img src="strzal.png" id="nabuj" width="10" style="position:absolute;">
+<img src="strzal.png" id="nabuj2" width="10" style="position:absolute;">
+<script>
+
+var tab = new Array();
+var tab2 = new Array();
+
+//---------------------------
+
+function prawo(pom){
+
+	
+    var poms=pom+10;
+    
+    $.get("xywrite2.php", { x: poms, kier : "prawo" },  function(data) {
+			});
+    
+}
+
+
+
+function lewo(pom){
+
+	
+    var poms=pom-10;
+    
+    $.get("xywrite2.php", { x: poms, kier: "lewo" },  function(data) {
+			});
+    
+}
+
+function dol(pom){
+
+	
+    var poms=pom+10;
+    
+    $.get("xywrite2.php", { y: poms, kier : "dol" },  function(data) {
+			});
+    
+}
+
+function gora(pom){
+
+    var poms=pom-10;
+    
+    $.get("xywrite2.php", { y: poms, kier : "gora" },  function(data) {
+			});
+    
+}
+
+
+$("#czoug").css("width","30");
+var strzal;
+var mozna=1;
+var strzalx;
+var strzaly;
+    var xy;
+	var ix;
+	var iy;
+	var kier;
+	var petlicz=0;
+	
+	   var xy2;
+	var ix2;
+	var iy2;
+	var kier2;
+	var kierb;
+	var kierb2;
+	
+	
+	
+	
+function odswierz(){
+	last_update = new Date().getTime();
+//-------------------------------------------------------------------------print czolg
+$.get("xyprint2.php", { lastfetch : last_update },  function(data) {
+    //wpiszemy jakas zmienna
+
+xy=data;
+
+
+tab=xy.split(",");
+
+
+
+
+
+iy=tab[1];
+ix=tab[0];
+kier=tab[2];
+if(petlicz==0){
+kier2=kier;
+}
+
+
+
+});
+//--------------------------------------czolg 2
+//alert("ppp");
+last_update = new Date().getTime();
+$.get("xyprint.php", { lastfetch : last_update },  function(data) {
+    //wpiszemy jakas zmienna
+
+xy2=data;
+
+
+tab2=xy2.split(",");
+
+
+
+
+
+iy2=tab2[1];
+ix2=tab2[0];
+kierb=tab2[2];
+if(petlicz==0){
+kierb2=kierb;
+}
+
+
+//alert(xy2);
+});
+
+//----------------------------------------
+if(strzal==1){
+$("#nabuj").show();
+//alert("strzal");
+if(kier2=="prawo"){
+if(mozna==1){
+strzalx=parseInt(ix)+70;
+strzaly=parseInt(iy)+10;
+
+}
+mozna=0;
+
+//----------------------------------------------------------------------------zapisstrzal
+ $.get("xywritestrzal2.php", { x: strzalx, y : strzaly },  function(data) {
+			});
+
+     strzalx=parseInt(strzalx)+10;;
+	}
+	
+
+
+
+
+
+
+if(kier2=="lewo"){
+if(mozna==1){
+strzalx=ix;
+strzaly=parseInt(iy)+10;
+
+}
+mozna=0;
+
+ $.get("xywritestrzal2.php", { x: strzalx, y : strzaly },  function(data) {
+			});
+
+     strzalx=parseInt(strzalx)-10;
+
+	 }
+	
+
+if(kier2=="gora"){
+if(mozna==1){
+strzalx=parseInt(ix)+10;
+strzaly=iy;
+
+}
+mozna=0;
+
+ $.get("xywritestrzal2.php", { y: strzaly,  x: strzalx },  function(data) {
+			});
+
+     strzaly=parseInt(strzaly)-10;
+
+	 }
+
+
+	 
+	 if(kier2=="dol"){
+if(mozna==1){
+strzalx=parseInt(ix)+10;
+strzaly=parseInt(iy)+70;
+
+}
+mozna=0;
+
+ $.get("xywritestrzal2.php", { y: strzaly,  x: strzalx },  function(data) {
+			});
+
+     strzaly=parseInt(strzaly)+10;
+
+	 }
+petlicz++;
+$("#loading").show();
+$("#loader").width(parseInt(petlicz*1.4)+"%");
+
+if(petlicz==70){
+strzal=0;
+mozna=1;
+petlicz=0;
+$("#nabuj").hide();
+$("#loading").hide();
+}
+//alert(petlicz);
+
+}
+
+//----------------------------------------------------html czolg
+
+$("#tank").css("margin-top",iy);
+//alert(tab[0]+"-x "+tab[1]+"-y");
+$("#tank").css("margin-left",ix);
+
+if(kier=="prawo"){
+
+$("#czoug").css("width","70");
+    $("#czoug").attr("src","prawo2.png");
+
+}
+
+
+if(kier=="lewo"){
+
+$("#czoug").css("width","70");
+    $("#czoug").attr("src","lewo2.png");
+
+}
+
+if(kier=="dol"){
+
+$("#czoug").css("width","30");
+
+    $("#czoug").attr("src","dol2.png");
+
+}
+
+
+if(kier=="gora"){
+
+$("#czoug").css("width","30");
+    $("#czoug").attr("src","gora2.png");
+
+}
+//-------------------------------------------------html czolg2
+
+
+
+$("#tank2").css("margin-top",iy2);
+//alert(tab[0]+"-x "+tab[1]+"-y");
+$("#tank2").css("margin-left",ix2);
+
+if(kierb=="prawo"){
+
+$("#czoug2").css("width","70");
+    $("#czoug2").attr("src","prawo.png");
+
+}
+
+
+if(kierb=="lewo"){
+
+$("#czoug2").css("width","70");
+    $("#czoug2").attr("src","lewo.png");
+
+}
+
+if(kierb=="dol"){
+
+$("#czoug2").css("width","30");
+
+    $("#czoug2").attr("src","dol.png");
+
+}
+
+
+if(kierb=="gora"){
+
+$("#czoug2").css("width","30");
+    $("#czoug2").attr("src","gora.png");
+
+}
+
+
+//---------------------------------------------------print strzal html strzal
+
+
+$.get("xyprintstrzal2.php", { lastfetch : last_update },  function(data) {
+    //wpiszemy jakas zmienna
+
+xy=data;
+
+
+tab=xy.split(",");
+
+
+$("#nabuj").css("margin-top",tab[1]);
+//alert(tab[0]+"-x "+tab[1]+"-y");
+$("#nabuj").css("margin-left",tab[0]);
+
+var width1=parseInt($("#tank2").css("margin-left").replace("px",""));
+var width2=50+width1;
+var height1=parseInt($("#tank2").css("margin-top").replace("px",""));
+var height2=parseInt(50)+parseInt($("#tank2").css("margin-top").replace("px",""));
+
+var nabujx=parseInt($("#nabuj").css("margin-left").replace("px",""));
+var nabujy=parseInt($("#nabuj").css("margin-top").replace("px",""));
+
+//console.log(width1 +" "+width2+" "+height1+" "+height2+" "+nabujx+" "+nabujy+" ");
+
+if(nabujx<width2 && nabujx>width1 && nabujy<height2 && nabujy>height1){
+alert("win");
+}
+
+
+
+
+});
+//------------------------------------------------strzal player 2
+
+
+$.get("xyprintstrzal.php", { lastfetch : last_update },  function(data) {
+    //wpiszemy jakas zmienna
+
+xy=data;
+
+
+tab2=xy.split(",");
+
+
+$("#nabuj2").css("margin-top",tab2[1]);
+//alert(tab[0]+"-x "+tab[1]+"-y");
+$("#nabuj2").css("margin-left",tab2[0]);
+
+
+
+
+
+
+});
+
+
+
+}
+
+setInterval("odswierz()","200");
+//alert(xy[0]+"-x "+xy[1]+"-y");
+//key----------------------
+var interval;
+var called = false;
+
+$(document).on('keydown', function(e) {
+    if(interval == null) {
+        console.log('keydown');
+        called = false;
+        interval = setInterval(function() {
+          //  alert(e.keyCode);
+		  if(e.keyCode==65){
+		  lewo(0);
+		  }
+		     if(e.keyCode==68){
+		  prawo(0);
+		  }
+		   if(e.keyCode==83){
+		  dol(0);
+		  }
+		   if(e.keyCode==87){
+		  gora(0);
+		  }
+		   if(e.keyCode==32){
+		 strzal=1;
+		  }
+		    if(e.keyCode==70){
+		 strzal=1;
+		  }
+		// console.log(e.keyCode);
+            called = true;
+        }, 250);
+    }
+
+}).on('keyup', function(e) {
+    console.log('keyup');
+    clearInterval(interval); 
+    interval = null;
+    if(!called){}
+        //doSomething(e.keyCode);
+});
+
+function doSomething(keyCode) {
+     console.log(keyCode);
+}
+
+</script>
+<table id="strzalki" style="position:absolute;"><tr><td align="center">
+<input type="button"  value="gora" id="gora" style="width:100;height:100;"></td></tr><tr><td>
+<input type="button"  value="lewo" id="lewo" style="width:100;height:100;"><input type="button"  value="strzal" id="strz" style="width:100;height:100;"><input type="button" style="width:100;height:100;" value="prawo" id="prawo"></td></tr><tr><td align="center">
+<input type="button"  value="dol" id="dol" style="width:100;height:100;"></td></tr></table>
+<table id="loading" style="position:absolute;display:none;"><tr><td style="width:500;background-color:000000;height:50;" ><div  id="loader" style="background-color:00ff00;width:100%;height:10;padding-top:10;"></div></td></tr></table>
+<script>
+
+$(window).on('resize', function()
+		{
+		var centro=$(window).width()/2-250;
+		
+		var centro2=$(window).height()-200;
+		
+		var centro3=$(window).height()-300;
+		
+			 
+			 
+			 $('#loading').css('margin-left', centro + "px");
+			  $('#loading').css('margin-top', centro2 + "px"); 
+			  $('#strzalki').css('margin-top', centro3 + "px");
+			  
+			 
+			
+			 
+			  			 
+//alert(centro);
+		}).resize();
+
+		
+		
+		$(document).ready(function() {
+  
+  var i = 0, timeOut = 0;
+  
+  $('#lewo').on('mousedown touchstart', function(e) {
+   
+    timeOut = setInterval(function(){
+    lewo(0);
+    }, 250);
+  }).bind('mouseup mouseleave touchend', function() {
+    $(this).removeClass('active');
+    clearInterval(timeOut);
+  });
+  
+});
+
+		$(document).ready(function() {
+  
+  var i = 0, timeOut = 0;
+  
+  $('#prawo').on('mousedown touchstart', function(e) {
+   
+    timeOut = setInterval(function(){
+    prawo(0);
+    }, 250);
+  }).bind('mouseup mouseleave touchend', function() {
+    $(this).removeClass('active');
+    clearInterval(timeOut);
+  });
+  
+});
+
+		$(document).ready(function() {
+  
+  var i = 0, timeOut = 0;
+  
+  $('#gora').on('mousedown touchstart', function(e) {
+   
+    timeOut = setInterval(function(){
+    gora(0);
+    }, 250);
+  }).bind('mouseup mouseleave touchend', function() {
+    $(this).removeClass('active');
+    clearInterval(timeOut);
+  });
+  
+});
+
+		$(document).ready(function() {
+  
+  var i = 0, timeOut = 0;
+  
+  $('#dol').on('mousedown touchstart', function(e) {
+   
+    timeOut = setInterval(function(){
+    dol(0);
+    }, 250);
+  }).bind('mouseup mouseleave touchend', function() {
+    $(this).removeClass('active');
+    clearInterval(timeOut);
+  });
+  
+});
+
+$(document).ready(function() {
+  
+  var i = 0, timeOut = 0;
+  
+  $('#strz').on('mousedown touchstart', function(e) {
+   
+    timeOut = setInterval(function(){
+  	 strzal=1;
+    }, 250);
+  }).bind('mouseup mouseleave touchend', function() {
+    $(this).removeClass('active');
+    clearInterval(timeOut);
+  });
+  
+});
+</script>
+</body></html>
